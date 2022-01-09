@@ -95,6 +95,7 @@ LONG NTAPI _r_app_exceptionfilter_callback (
 
 	return EXCEPTION_EXECUTE_HANDLER;
 }
+#endif // _DEBUG
 
 //
 // Application: common
@@ -376,6 +377,7 @@ BOOLEAN _r_app_initialize_dll ()
 	return TRUE;
 }
 
+#if !defined(_DEBUG)
 VOID _r_app_initialize_seh ()
 {
 	ULONG error_mode;
