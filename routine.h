@@ -3141,7 +3141,7 @@ HMODULE _r_sys_loadlibrary (
 	_In_ LPCWSTR lib_name
 );
 
-BOOLEAN _r_sys_createprocess_ex (
+NTSTATUS _r_sys_createprocess_ex (
 	_In_opt_ LPCWSTR file_name,
 	_In_opt_ LPCWSTR command_line,
 	_In_opt_ LPCWSTR current_directory,
@@ -3255,7 +3255,7 @@ FORCEINLINE VOID _r_sys_closehandle (
 	}
 }
 
-FORCEINLINE BOOLEAN _r_sys_createprocess (
+FORCEINLINE NTSTATUS _r_sys_createprocess (
 	_In_opt_ LPCWSTR file_name,
 	_In_opt_ LPCWSTR command_line,
 	_In_opt_ LPCWSTR current_directory
