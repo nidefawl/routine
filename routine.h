@@ -2305,10 +2305,9 @@ BOOLEAN _r_fs_mkdir (
 	_In_ LPCWSTR path
 );
 
-_Success_ (return == STATUS_SUCCESS)
-NTSTATUS _r_fs_readfile (
-	_In_ HANDLE hfile,
-	_Out_ PR_BYTE_PTR out_buffer
+_Ret_maybenull_
+PR_BYTE _r_fs_readfile (
+	_In_ HANDLE hfile
 );
 
 BOOLEAN _r_fs_setpos (
@@ -3753,7 +3752,7 @@ VOID _r_layout_setoriginalsize (
 	_In_ LONG height
 );
 
-VOID _r_layout_setitemanchor (
+VOID _r_layout_getitemanchor (
 	_Inout_ PR_LAYOUT_ITEM layout_item
 );
 

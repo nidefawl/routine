@@ -12537,7 +12537,6 @@ VOID _r_crypt_initialize (
 	_In_ BOOLEAN is_hashing
 )
 {
-	crypt_context->reserved1 = 0;
 	crypt_context->is_hashing = is_hashing;
 
 	crypt_context->alg_handle = NULL;
@@ -12551,7 +12550,6 @@ VOID _r_crypt_destroycryptcontext (
 	_In_ PR_CRYPT_CONTEXT crypt_context
 )
 {
-	crypt_context->reserved1 = 0;
 
 	if (crypt_context->is_hashing)
 	{
@@ -13378,8 +13376,6 @@ HRESULT _r_xml_initializelibrary (
 {
 	HRESULT hr;
 
-	xml_library->reserved1 = 0;
-
 	if (is_reader)
 	{
 		hr = CreateXmlReader (
@@ -13436,7 +13432,6 @@ VOID _r_xml_destroylibrary (
 	if (!xml_library->is_initialized)
 		return;
 
-	xml_library->reserved1 = 0;
 	//xml_library->is_initialized = FALSE;
 
 	if (xml_library->is_reader)
