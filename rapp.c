@@ -1067,10 +1067,13 @@ INT _r_app_getshowcode (
 }
 
 _Ret_maybenull_
-HWND _r_app_createwindow (
+HWND _r_app_createwindow_ex (
+	_In_opt_ HINSTANCE hinstance,
 	_In_ LPCWSTR dlg_name,
 	_In_opt_ LPCWSTR icon_name,
-	_In_ DLGPROC dlg_proc
+	_In_opt_ HWND hparent,
+	_In_ DLGPROC dlg_proc,
+	_In_opt_ PVOID lparam
 )
 {
 #ifdef APP_HAVE_UPDATES
@@ -1104,11 +1107,11 @@ HWND _r_app_createwindow (
 
 	// create main window
 	hwnd = _r_wnd_createwindow (
-		NULL,
+		hinstance,
 		dlg_name,
-		NULL,
+		hparent,
 		dlg_proc,
-		NULL
+		lparam
 	);
 
 	_r_app_sethwnd (hwnd);
@@ -1192,6 +1195,23 @@ HWND _r_app_createwindow (
 #endif // APP_HAVE_UPDATES
 
 	return hwnd;
+}
+
+_Ret_maybenull_
+HWND _r_app_createwindow (
+	_In_ LPCWSTR dlg_name,
+	_In_opt_ LPCWSTR icon_name,
+	_In_ DLGPROC dlg_proc
+)
+{
+	return _r_app_createwindow_ex (
+		NULL,
+		dlg_name,
+		icon_name,
+		NULL,
+		dlg_proc,
+		NULL
+	);
 }
 
 BOOLEAN _r_app_runasadmin ()
