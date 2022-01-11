@@ -352,7 +352,7 @@ BOOLEAN _r_format_number (
 		buffer_size
 	);
 
-	if (!buffer_size)
+	if (!buffer_size) //?
 		_r_str_copy (buffer, buffer_size, number_string);
 
 	return TRUE;
@@ -5705,6 +5705,8 @@ BOOLEAN _r_str_copy (
 	_In_ LPCWSTR string
 )
 {
+	assert (buffer_size);
+
 	if (buffer_size <= PR_SIZE_MAX_STRING_LENGTH)
 	{
 		if (!_r_str_isempty (string))
