@@ -3357,8 +3357,9 @@ VOID _r_log (
 
 	// print log for debuggers
 	_r_debug_v (
-		L"[%s],%s,0x%08" TEXT (PRIX32) L",%s\r\n",
+		L"[%s][%x],%s,0x%04" TEXT (PRIX32) L",%s\r\n",
 		level_string,
+		(INT)GetCurrentThreadId (),
 		title,
 		code,
 		description
