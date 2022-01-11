@@ -567,6 +567,7 @@ HWND _r_app_createwindow_ex (
 	_In_ DLGPROC dlg_proc,
 	_In_opt_ PVOID lparam
 );
+
 INT _r_app_getshowcode (
 	_In_ HWND hwnd
 );
