@@ -120,11 +120,16 @@ LPCWSTR _r_app_getmutexname ()
 
 	if (!current_name)
 	{
+#if APP_NO_MUTEX == 2
+		ULONG hash_commandline = 0;
+#else
+		ULONG hash_commandline = _r_str_gethash (_r_sys_getimagecommandline (), TRUE);
+#endif
 		new_name = _r_format_string (
 			L"%s-%" TEXT (PR_ULONG) L"-%" TEXT (PR_ULONG),
 			_r_app_getnameshort (),
 			_r_str_gethash (_r_sys_getimagepath (), TRUE),
-			_r_str_gethash (_r_sys_getimagecommandline (), TRUE)
+			hash_commandline
 		);
 
 		current_name = InterlockedCompareExchangePointer (
