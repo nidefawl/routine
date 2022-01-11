@@ -3351,7 +3351,7 @@ VOID _r_log (
 		return;
 
 	current_timestamp = _r_unixtime_now ();
-	date_string = _r_format_unixtime_ex (current_timestamp, FDTF_SHORTDATE | FDTF_LONGTIME);
+	date_string = _r_format_unixtime_ex (current_timestamp, FDTF_SHORTDATE | FDTF_LONGTIME | FDTF_NOAUTOREADINGORDER);
 
 	level_string = _r_log_leveltostring (log_level);
 
