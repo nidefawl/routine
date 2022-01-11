@@ -3397,7 +3397,7 @@ VOID _r_log (
 
 	// show tray balloon
 #if defined(APP_HAVE_TRAY)
-	if (tray_guid)
+	if (tray_guid && log_level >= LOG_LEVEL_ERROR)
 	{
 		ULONG icon_id;
 
