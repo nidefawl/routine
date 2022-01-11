@@ -7722,7 +7722,7 @@ PR_STRING _r_sys_gettempdirectory ()
 
 	return current_path;
 }
-
+#if !defined(APP_EXTERNAL_SYSOPT)
 BOOLEAN _r_sys_getopt (
 	_In_ LPCWSTR args,
 	_In_ LPCWSTR name,
@@ -7841,6 +7841,7 @@ BOOLEAN _r_sys_getopt (
 
 	return is_success;
 }
+#endif
 
 _Success_ (return == STATUS_SUCCESS)
 NTSTATUS _r_sys_getservicesid (
