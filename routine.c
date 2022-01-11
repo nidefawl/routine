@@ -8352,7 +8352,7 @@ HMODULE _r_sys_loadlibrary (
 	return hlib;
 }
 
-NTSTATUS _r_sys_createprocess_ex (
+ULONG _r_sys_createprocess_ex (
 	_In_opt_ LPCWSTR file_name,
 	_In_opt_ LPCWSTR command_line,
 	_In_opt_ LPCWSTR current_directory,
@@ -8361,7 +8361,8 @@ NTSTATUS _r_sys_createprocess_ex (
 	_In_ ULONG flags
 )
 {
-	NTSTATUS status;
+	BOOL result = FALSE;
+	ULONG lasterror = 0;
 
 	STARTUPINFO startup_info = {0};
 	PROCESS_INFORMATION process_info = {0};
@@ -8442,7 +8443,7 @@ NTSTATUS _r_sys_createprocess_ex (
 			current_directory_string = _r_path_getbasedirectory (&file_name_string->sr);
 	}
 
-	status = CreateProcess (
+	result = CreateProcess (
 		_r_obj_getstring (file_name_string),
 		command_line_string ? command_line_string->buffer : NULL,
 		NULL, NULL,
@@ -8453,6 +8454,9 @@ NTSTATUS _r_sys_createprocess_ex (
 		startup_info_ptr,
 		&process_info
 	);
+
+	if (!result)
+		lasterror = GetLastError();
 
 	if (process_info.hProcess)
 		NtClose (process_info.hProcess);
@@ -8469,7 +8473,7 @@ NTSTATUS _r_sys_createprocess_ex (
 	if (current_directory_string)
 		_r_obj_dereference (current_directory_string);
 
-	return status;
+	return lasterror;
 }
 
 NTSTATUS _r_sys_openprocess (
