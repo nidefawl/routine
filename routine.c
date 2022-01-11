@@ -1812,9 +1812,6 @@ NTSTATUS _r_workqueue_threadproc (
 
 			list_entry = RemoveHeadList (&work_queue->queue_list_head);
 
-			if (IsListEmpty (&work_queue->queue_list_head))
-				_r_condition_pulse (&work_queue->queue_empty_condition);
-
 			_r_queuedlock_releaseexclusive (&work_queue->queue_lock);
 
 			// Make sure we got work.
@@ -1831,6 +1828,14 @@ NTSTATUS _r_workqueue_threadproc (
 
 				_r_workqueue_destroyitem (work_queue_item);
 			}
+
+			// Signal empty queue after processing the item
+			_r_queuedlock_acquireexclusive (&work_queue->queue_lock);
+
+			if (IsListEmpty (&work_queue->queue_list_head))
+				_r_condition_pulse (&work_queue->queue_empty_condition);
+
+			_r_queuedlock_releaseexclusive (&work_queue->queue_lock);
 		}
 		else
 		{
