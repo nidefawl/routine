@@ -3436,6 +3436,9 @@ VOID _r_log_v (
 	...
 )
 {
+	if (!_r_log_isenabled (log_level))
+		return;
+
 	WCHAR string[1024];
 	va_list arg_ptr;
 
