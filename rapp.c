@@ -3649,6 +3649,8 @@ VOID _r_show_errormessage (
 		}
 	}
 
+	_r_log (LOG_LEVEL_ERROR, NULL, L"Error", error_code, str_content);
+
 #if !defined(APP_NO_DEPRECATIONS)
 	if (_r_sys_isosversiongreaterorequal (WINDOWS_VISTA))
 #endif // !APP_NO_DEPRECATIONS
