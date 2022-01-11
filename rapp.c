@@ -3608,7 +3608,11 @@ VOID _r_show_errormessage (
 	}
 	else
 	{
-		if (NT_NTWIN32 (error_code))
+		if (error_code >= WINHTTP_ERROR_BASE && error_code <= WINHTTP_ERROR_LAST)
+		{
+			hmodule = GetModuleHandle (L"winhttp.dll"); // FORMAT_MESSAGE_FROM_SYSTEM
+		}
+		else if (NT_FACILITY (error_code) == FACILITY_NTWIN32 || NT_FACILITY (error_code) == FACILITY_NULL)
 		{
 			hmodule = GetModuleHandle (L"kernel32.dll"); // FORMAT_MESSAGE_FROM_SYSTEM
 		}
@@ -3621,7 +3625,7 @@ VOID _r_show_errormessage (
 	buffer = NULL;
 
 	FormatMessage (
-		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS,
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 		hmodule,
 		error_code,
 		0,
