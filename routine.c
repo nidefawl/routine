@@ -11207,8 +11207,9 @@ INT _r_wnd_messageloop (
 	MSG msg;
 	HWND hactive_wnd;
 	HACCEL haccelerator;
-	INT result;
 	BOOLEAN is_processed;
+	INT result;
+	INT exitcode = ERROR_SUCCESS;
 
 	haccelerator = LoadAccelerators (NULL, accelerator_table);
 
@@ -11218,7 +11219,10 @@ INT _r_wnd_messageloop (
 	while (TRUE)
 	{
 		result = GetMessage (&msg, NULL, 0, 0);
-
+		if (msg.message == WM_QUIT)
+		{
+			exitcode = (INT) msg.wParam;
+		}
 		if (result <= 0)
 			break;
 
@@ -11253,7 +11257,7 @@ INT _r_wnd_messageloop (
 
 	DestroyAcceleratorTable (haccelerator);
 
-	return ERROR_SUCCESS;
+	return exitcode;
 }
 
 static R_QUEUED_LOCK _r_context_lock = PR_QUEUED_LOCK_INIT;
