@@ -746,7 +746,7 @@ PR_STRING _r_app_getlogpath ()
 			_r_app_getprofiledirectory ()->buffer,
 			L"\\",
 			_r_app_getnameshort (),
-			L"_debug.log"
+			L".log"
 		);
 
 		current_path = InterlockedCompareExchangePointer (
@@ -1144,9 +1144,6 @@ HWND _r_app_createwindow_ex (
 			_r_sys_loadsharedicon (_r_sys_getimagebase (), icon_name, icon_large_x, icon_large_y)
 		);
 	}
-
-	// set window prop
-	SetProp (hwnd, _r_app_getname (), IntToPtr (42));
 
 	// set window on top
 	_r_wnd_top (hwnd, _r_config_getboolean (L"AlwaysOnTop", FALSE));
@@ -3246,9 +3243,12 @@ BOOLEAN _r_log_isenabled (
 	_In_ R_LOG_LEVEL log_level_check
 )
 {
+#if defined(_DEBUG)
+	return true;
+#else
 	R_LOG_LEVEL log_level;
 
-	log_level = _r_config_getlong (L"ErrorLevel", LOG_LEVEL_DEBUG);
+	log_level = _r_config_getlong (L"ErrorLevel", LOG_LEVEL_INFO);
 
 	if (log_level == LOG_LEVEL_DISABLED)
 		return FALSE;
@@ -3260,6 +3260,7 @@ BOOLEAN _r_log_isenabled (
 	}
 
 	return TRUE;
+#endif // _DEBUG
 }
 
 _Ret_maybenull_
@@ -3355,9 +3356,16 @@ VOID _r_log (
 
 	level_string = _r_log_leveltostring (log_level);
 
+	LPCWSTR dbg_fmt_string;
+
+	if (code < 100)
+		dbg_fmt_string = L"[%s][%x],%s,%zu,%s\r\n";
+	else
+		dbg_fmt_string = L"[%s][%x],%s,0x%04" TEXT (PRIX64) L",%s\r\n";
+
 	// print log for debuggers
 	_r_debug_v (
-		L"[%s][%x],%s,0x%04" TEXT (PRIX32) L",%s\r\n",
+		dbg_fmt_string,
 		level_string,
 		(INT)GetCurrentThreadId (),
 		title,
@@ -3369,8 +3377,12 @@ VOID _r_log (
 
 	if (hfile)
 	{
+		if (code < 100)
+			dbg_fmt_string = PR_DEBUG_BODY_DEC;
+		else
+			dbg_fmt_string = PR_DEBUG_BODY;
 		error_string = _r_format_string (
-			PR_DEBUG_BODY,
+			dbg_fmt_string,
 			level_string,
 			_r_obj_getstring (date_string),
 			title,
