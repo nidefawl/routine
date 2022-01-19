@@ -3535,18 +3535,15 @@ VOID _r_show_aboutmessage (
 		td_buttons[1].pszButtonText = L"Close";
 #pragma PR_PRINT_WARNING(IDS_CLOSE)
 #endif // IDS_CLOSE
-
 		_r_str_printf (
 			str_content, RTL_NUMBER_OF (str_content),
-			L"Version %s %s, %" TEXT (PRIi32) L"-bit (Unicode)\r\n%s\r\n\r\n<a href=\"%s\">%s</a> | <a href=\"%s\">%s</a>",
+			L"Version %s %s, %" TEXT (PRIi32) L"-bit (Unicode)\r\n%s\r\n\r\nRepo: <a href=\"%s\">%s</a>",
 			_r_app_getversion (),
 			_r_app_getversiontype (),
 			_r_app_getarch (),
 			_r_app_getcopyright (),
-			_r_app_getwebsite_url (),
-			_r_app_getwebsite_url () + 8,
-			_r_app_getsources_url (),
-			_r_app_getsources_url () + 8
+			GIT_URL_NIDEFAWL_URL APP_NAME_SHORT,
+			GIT_URL_NIDEFAWL_SHORT APP_NAME_SHORT
 		);
 
 		tdc.pszFooter = APP_ABOUT_FOOTER;

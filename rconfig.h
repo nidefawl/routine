@@ -98,14 +98,10 @@
 //
 // Messages
 //
-
-#define APP_ABOUT_FOOTER L"This program is free software; you can redistribute it and/or modify it under the terms of" \
-			L"the <a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License 3</a>" \
-			L"as published by the Free Software Foundation."
-
-#define APP_ABOUT_FOOTER_CLEAN L"This program is free software; you can redistribute it and/\r\n" \
-					   L"or modify it under the terms of the GNU General Public\r\nLicense 3 as published" \
-					   L"by the Free Software Foundation."
+#define GIT_URL_NIDEFAWL_URL L"https://github.com/nidefawl/"
+#define GIT_URL_NIDEFAWL_SHORT L"github.com/nidefawl/"
+#define APP_ABOUT_FOOTER L"Sourcecode fork of <a href=\"https://github.com/henrypp/chrlauncher\">github.com/henrypp/chrlauncher</a>\r\n" \
+						L"Licensed under MIT. Please read the <a href=\"LICENSE.txt\">LICENSE.txt</a>"
 
 #define APP_EXCEPTION_TITLE L"Exception raised :("
 #define APP_SECURITY_TITLE L"Security warning!"

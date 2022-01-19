@@ -623,17 +623,17 @@ FORCEINLINE LPCWSTR _r_app_getcopyright ()
 
 FORCEINLINE LPCWSTR _r_app_getdonate_url ()
 {
-	return L"https://www.henrypp.org/donate?from=chrlauncher";
+	return L"https://www.henrypp.org/donate?from=" APP_NAME_SHORT;
 }
 
 FORCEINLINE LPCWSTR _r_app_getsources_url ()
 {
-	return L"https://github.com/nidefawl";
+	return GIT_URL_NIDEFAWL_URL APP_NAME_SHORT;
 }
 
 FORCEINLINE LPCWSTR _r_app_getwebsite_url ()
 {
-	return L"https://www.henrypp.org";
+	return GIT_URL_NIDEFAWL_URL APP_NAME_SHORT;
 }
 
 FORCEINLINE LPCWSTR _r_app_getversiontype ()
