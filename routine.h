@@ -1064,10 +1064,23 @@ FORCEINLINE PR_STRING _r_obj_createstring (
 	);
 }
 
+FORCEINLINE PR_STRING _r_obj_safecopystring (
+	_In_ PR_STRING string
+)
+{
+	if (!string||_r_obj_isstringempty(string))
+		return string;
+	return _r_obj_createstring_ex (
+		string->buffer,
+		string->length
+	);
+}
+
 FORCEINLINE PR_STRING _r_obj_createstring2 (
 	_In_ PR_STRING string
 )
 {
+	assert (string);
 	return _r_obj_createstring_ex (
 		string->buffer,
 		string->length
@@ -1078,6 +1091,7 @@ FORCEINLINE PR_STRING _r_obj_createstring3 (
 	_In_ PR_STRINGREF string
 )
 {
+	assert (string);
 	return _r_obj_createstring_ex (
 		string->buffer,
 		string->length
@@ -1088,6 +1102,7 @@ FORCEINLINE PR_STRING _r_obj_createstring4 (
 	_In_ PUNICODE_STRING string
 )
 {
+	assert (string);
 	return _r_obj_createstring_ex (
 		string->Buffer,
 		string->Length
