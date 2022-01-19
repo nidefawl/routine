@@ -74,7 +74,7 @@
 #if defined(APP_COMMENT)
 #pragma PR_PRINT_WARNING_DEFINE(APP_COMMENT)
 #else
-#	define APP_COMMENT "What a tragedy it is for these words to fall upon deaf ears doomed to never reach their subject..."
+#	define APP_COMMENT "Smoke weed every day..."
 #endif /// APP_COMMENT
 
 // update checking period (in days)
@@ -110,7 +110,7 @@
 #define APP_EXCEPTION_TITLE L"Exception raised :("
 #define APP_SECURITY_TITLE L"Security warning!"
 
-#define APP_FAILED_MESSAGE_TITLE L"It happens ;("
+#define APP_FAILED_MESSAGE_TITLE L"Oooop... An error occured"
 #define APP_FAILED_MESSAGE_FOOTER L"This information may provide clues as to what went wrong and how to fix it."
 
 #define APP_FAILED_ADMIN_RIGHTS L"Administrative privileges are required!"

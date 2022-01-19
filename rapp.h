@@ -461,6 +461,14 @@ VOID _r_show_errormessage (
 	_In_opt_ PR_ERROR_INFO error_info_ptr
 );
 
+VOID _r_show_errormessage_ex (
+	_In_opt_ HWND hwnd,
+	_In_opt_ LPCWSTR main,
+	_In_ ULONG error_code,
+	_In_opt_ PR_ERROR_INFO error_info_ptr,
+	_In_opt_ PR_STRING more_context
+);
+
 BOOLEAN _r_show_confirmmessage (
 	_In_opt_ HWND hwnd,
 	_In_opt_ LPCWSTR main,
@@ -615,12 +623,12 @@ FORCEINLINE LPCWSTR _r_app_getcopyright ()
 
 FORCEINLINE LPCWSTR _r_app_getdonate_url ()
 {
-	return L"https://www.henrypp.org/donate?from=" APP_NAME_SHORT;
+	return L"https://www.henrypp.org/donate?from=chrlauncher";
 }
 
 FORCEINLINE LPCWSTR _r_app_getsources_url ()
 {
-	return L"https://github.com/henrypp";
+	return L"https://github.com/nidefawl";
 }
 
 FORCEINLINE LPCWSTR _r_app_getwebsite_url ()

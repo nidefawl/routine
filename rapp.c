@@ -236,7 +236,7 @@ BOOLEAN _r_app_initialize_com ()
 	HRESULT hr;
 
 	// initialize COM library
-	hr = CoInitializeEx (NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+	hr = CoInitializeEx (NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE); // per thread?
 
 	if (!SUCCEEDED (hr))
 	{
@@ -3603,13 +3603,23 @@ VOID _r_show_errormessage (
 	_In_opt_ PR_ERROR_INFO error_info_ptr
 )
 {
+	_r_show_errormessage_ex (hwnd, main, error_code, error_info_ptr, NULL);
+}
+VOID _r_show_errormessage_ex (
+	_In_opt_ HWND hwnd,
+	_In_opt_ LPCWSTR main,
+	_In_ ULONG error_code,
+	_In_opt_ PR_ERROR_INFO error_info_ptr,
+	_In_opt_ PR_STRING more_context
+)
+{
 	TASKDIALOGCONFIG tdc;
-	TASKDIALOG_BUTTON td_buttons[2];
-	WCHAR str_content[1024];
+	TASKDIALOG_BUTTON td_buttons[3];
+	WCHAR str_content[2048];
 	LPCWSTR str_main;
 	LPCWSTR str_footer;
 	LPCWSTR path;
-	R_STRINGREF sr;
+	//R_STRINGREF sr;
 	HLOCAL buffer;
 	HINSTANCE hmodule;
 	INT command_id;
@@ -3649,8 +3659,10 @@ VOID _r_show_errormessage (
 	str_main = main ? main : APP_FAILED_MESSAGE_TITLE;
 	str_footer = APP_FAILED_MESSAGE_FOOTER;
 
+
 	if (buffer)
 		_r_str_trim (buffer, L"\r\n ");
+
 
 	_r_str_printf (
 		str_content,
@@ -3669,6 +3681,12 @@ VOID _r_show_errormessage (
 		}
 	}
 
+	if (!_r_obj_isstringempty (more_context))
+	{
+		_r_str_append (str_content, RTL_NUMBER_OF (str_content), L"\r\n\r\n");
+		_r_str_append (str_content, RTL_NUMBER_OF (str_content), more_context->buffer);
+	}
+
 	_r_log (LOG_LEVEL_ERROR, NULL, L"Error", error_code, str_content);
 
 #if !defined(APP_NO_DEPRECATIONS)
@@ -3678,10 +3696,10 @@ VOID _r_show_errormessage (
 		RtlZeroMemory (&tdc, sizeof (tdc));
 
 		tdc.cbSize = sizeof (tdc);
-		tdc.dwFlags = TDF_ENABLE_HYPERLINKS | TDF_NO_SET_FOREGROUND | TDF_SIZE_TO_CONTENT;
+		tdc.dwFlags = TDF_ENABLE_HYPERLINKS | TDF_SIZE_TO_CONTENT;
 		tdc.hwndParent = hwnd;
 		tdc.hInstance = _r_sys_getimagebase ();
-		tdc.pszFooterIcon = TD_WARNING_ICON;
+		tdc.pszFooterIcon = 0;
 		tdc.pszWindowTitle = _r_app_getname ();
 		tdc.pszMainInstruction = str_main;
 		tdc.pszContent = str_content;
@@ -3694,20 +3712,27 @@ VOID _r_show_errormessage (
 			// add "Crash dumps" button
 			td_buttons[0].pszButtonText = L"Crash dumps";
 			td_buttons[0].nButtonID = IDYES;
+			// add "Close" button
+			td_buttons[1].pszButtonText = L"Close";
+			td_buttons[1].nButtonID = IDCLOSE;
+			tdc.cButtons = 2;
 		}
 		else
 		{
 			// add "Copy" button
-			td_buttons[0].pszButtonText = L"Copy";
-			td_buttons[0].nButtonID = IDNO;
+			td_buttons[0].pszButtonText = L"Open configuration";
+			td_buttons[0].nButtonID = IDRETRY;
+			// add "Copy" button
+			td_buttons[1].pszButtonText = L"Open logfile";
+			td_buttons[1].nButtonID = IDNO;
+			// add "Close" button
+			td_buttons[2].pszButtonText = L"Close";
+			td_buttons[2].nButtonID = IDCLOSE;
+			tdc.cButtons = 3;
 		}
 
-		// add "Close" button
-		td_buttons[1].pszButtonText = L"Close";
-		td_buttons[1].nButtonID = IDCLOSE;
 
 		tdc.pButtons = td_buttons;
-		tdc.cButtons = RTL_NUMBER_OF (td_buttons);
 
 		tdc.nDefaultButton = IDCLOSE;
 
@@ -3720,10 +3745,27 @@ VOID _r_show_errormessage (
 				if (path)
 					_r_shell_opendefault (path);
 			}
+			else if (command_id == IDRETRY)
+			{
+
+				PR_STRING path;
+
+				path = _r_app_getconfigpath ();
+
+				if (_r_fs_exists (path->buffer))
+					_r_shell_opendefault (path->buffer);
+				/*		_r_obj_initializestringref (&sr, str_content);
+						_r_clipboard_set (NULL, &sr);*/
+			}
 			else if (command_id == IDNO)
 			{
-				_r_obj_initializestringref (&sr, str_content);
-				_r_clipboard_set (NULL, &sr);
+
+				PR_STRING path;
+
+				path = _r_app_getlogpath ();
+
+				if (_r_fs_exists (path->buffer))
+					_r_shell_opendefault (path->buffer);
 			}
 		}
 	}
